@@ -1,0 +1,174 @@
+/* Style for the "Go to Top" button */
+#goToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    bottom: 1.65em; /* 20px from the bottom */
+    right: 2em; /* 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: #000; /* Black background */
+    color: white; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    padding: 1em; /* Some padding */
+    border-radius: 0.625em; /* Rounded corners */
+    width: 3em; /* Square width */
+    height: 3em; /* Square height */
+    font-size: 1.5em;
+}
+
+html {
+    height: 100%;
+}
+
+#index {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+aside {
+    flex: 1;
+}
+
+/* styles.css */
+footer {
+    /*flex: 1;*/
+    width: 100%;
+    /*max-height: 1.25em;*/
+    padding: 0.5em;
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center; /* Center the text */
+    font-size: 0.75em; /* Font size for the footer text */
+    color: #6c757d; /* Grey color for the text */
+}
+
+footer p {
+    margin: 5px 0; /* Margin between the paragraphs */
+}
+
+#index > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#index > #queryString {
+    text-align: center;
+    color: red;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+header {
+    text-align: center;
+}
+
+/* styles.css */
+form {
+    display: block;
+}
+
+#results {
+    padding-bottom: 4em;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* Adjust as needed */
+    margin-top: 10px; /* Adjust as needed */
+}
+
+.button-link {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+}
+
+/* Style for unvisited button links */
+a.button-link:link {
+    color: #fff; /* White text for button links */
+}
+
+/* Style for visited button links */
+a.button-link:visited {
+    color: #fff; /* White text for visited button links */
+}
+
+
+#index {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+body, body * {
+    font-family: Arial, sans-serif;
+}
+
+/* Style for unvisited links */
+a:link {
+    color: #007BFF; /* Same as .button-link background color */
+}
+
+/* Style for visited links */
+a:visited {
+    color: #007BFF; /* Same as .button-link background color */
+}
+
+#goToTopBtn:hover {
+    background-color: #555; /* Add a dark-grey background on hover */
+}
+
+/* styles.css */
+form div {
+    margin-bottom: 1em;
+}
+
+
+#tech-table, #app-table {
+    border-collapse: collapse;
+    width: 45%;
+    margin: 10px;
+}
+
+th,  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th, th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+.tables-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+}
+
+@media (min-width: 47em) {
+
+    .tables-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        margin: 20px;
+    }
+
+    .tables-container {
+        flex-direction: row;
+    }
+}
