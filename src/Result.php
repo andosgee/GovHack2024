@@ -12,8 +12,6 @@
 // Result.php
 $superSecretGoogleAPIKey = "AIzaSyDuC96XOlo4Xzq1k70CasTLwzYtM3AyLTg";
 
-var_dump($_POST);
-
 // Retrieve and sanitize form data
 $address = $_POST['address'];
 $roofAngle = $_POST['roofAngle'] != '' ? floatval($_POST['roofAngle']) : true;
