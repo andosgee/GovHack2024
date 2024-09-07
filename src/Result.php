@@ -12,6 +12,8 @@
 // Result.php
 $superSecretGoogleAPIKey = "AIzaSyDuC96XOlo4Xzq1k70CasTLwzYtM3AyLTg";
 
+var_dump($_POST);
+
 // Retrieve and sanitize form data
 $address = $_POST['address'];
 $roofAngle = $_POST['roofAngle'] != '' ? floatval($_POST['roofAngle']) : true;
@@ -19,6 +21,8 @@ $panelDirection = $_POST['panelDirection'] != '' ? floatval($_POST['panelDirecti
 $areaOfPanels = $_POST['areaOfPanels'] != '' ? floatval($_POST['areaOfPanels']) : 1;
 $avgkWh = floatval($_POST['avgkWh']);
 $avgCostPerUnit = floatval($_POST['avgCost']);
+$costOfSystem = $_POST['costOfSetup'] != '' ? floatval($_POST['costOfSetup']) : false;
+
 
 // Prepare the address for the Google Maps API
 $address = urlencode($address);
@@ -192,7 +196,13 @@ $totalSavings = 0;
 </table>
 
 <?php
-echo "<p>With $areaOfPanels meters squared of solar panels on your house facing $panelDirection&deg; to North at ".abs($roofAngle)."&deg; you could possibly save up to $".number_format($yearlySavings, 2)." a year in power costs.</p>"
+echo "<p>With $areaOfPanels meters squared of solar panels on your house facing $panelDirection&deg; to North at ".abs($roofAngle)."&deg; you could possibly save up to $".number_format($yearlySavings, 2)." a year in power costs.</p>";
+
+if ($costOfSystem !== false) {
+    $payBackYears = $costOfSystem / $yearlySavings;
+    echo "<p>With an upfront cost of ".number_format($costOfSystem)." it will take you ". number_format($payBackYears, 2)." years to pay back your system.</p>";
+    echo "<p>This does not account for power cost fluctuations, power being sold back to the power company and presumes generation based on above data</p>";
+}
 ?>
 
 <p>Image and data gotten from <a href='https://niwa.co.nz/'>NIWA, the National Institute of Water and Atmospheric Research</a> </p>

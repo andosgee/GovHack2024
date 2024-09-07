@@ -33,18 +33,24 @@
         </label>
     </div>
     <div>
-        <label>Roof Angle aka. Panel tilt (Degrees):
+        <label>Roof Angle aka. Panel tilt (Degrees) (optional):
             <input type="number" name="roofAngle" step="0.01" placeholder="0 is horizontal, default is latitude"> &deg;
         </label>
     </div>
     <div>
-        <label>Direction Panels are facing (Degrees):
+        <label>Direction Panels are facing (Degrees) (optional):
             <input type="number" name="panelDirection" step="0.01" placeholder="Default North which is 0"> &deg;
         </label>
     </div>
     <div>
-        <label>Area of Panels in m<sup>2</sup>:
+        <label>Area of Panels in m<sup>2</sup> (optional):
             <input type="number" name="areaOfPanels" step="0.01" placeholder="Default is 1"> m<sup>2</sup>
+        </label>
+    </div>
+    <div>
+        If provided will work out the ROI based on power given to panels over the area of panels provided<br><br>
+        <label>Upfront cost of Solar Panel Setup (incl. Batteries etc) (optional):
+            $<input type="number" name="costOfSetup" placeholder="10000">
         </label>
     </div>
     <button class="button-link" type="submit" value="submit">Submit</button>
