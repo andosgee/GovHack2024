@@ -6,10 +6,9 @@
     <title>GovHack Solar Calculator</title>
     <link rel="stylesheet" href="styles.css">
     <script type="module" src="./mapAutoComplete.js"></script>
-    <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuC96XOlo4Xzq1k70CasTLwzYtM3AyLTg&callback=initMap&libraries=places&v=weekly"
-            defer></script>
-<!--    <script src="scripts.js" defer></script>-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuC96XOlo4Xzq1k70CasTLwzYtM3AyLTg&libraries=places"></script>
+    <script src="mapAutoComplete.js" defer></script>
 </head>
 <body id="index">
 <header>
@@ -17,30 +16,9 @@
 </header>
 <form id="SearchForm" method="POST" action="Result.php" onsubmit="return validateForm()">
     <div>
-        <label>Address Line 1:
-            <input type="text" name="addressLine1" placeholder="123 Main St" required>
+        <label>Address:
+            <input id="autocomplete_search" style="width: 100%;" name="address" type="text" class="form-control" placeholder="Search" />
         </label>
-    </div>
-    <div>
-        <label>Address Line 2:
-            <input type="text" name="addressLine2" placeholder="Apt 4B">
-        </label>
-    </div>
-    <div>
-        <label>City:
-            <input type="text" name="city" placeholder="City" required>
-        </label>
-    </div>
-    <div>
-        <label>Zip Code:
-            <input type="text" name="zipCode" placeholder="1234" required>
-        </label>
-    </div>
-    <div>
-        <label>Country:
-            <input type="text" name="country" value="New Zealand" readonly required>
-        </label>
-    </div>
     <div>
         <label>Roof Angle aka. Panel tilt (Degrees):
             <input type="number" name="roofAngle" placeholder="0 is horizontal, default is latitude">

@@ -11,19 +11,16 @@
 <?php
 // Result.php
 $superSecretGoogleAPIKey = "AIzaSyDuC96XOlo4Xzq1k70CasTLwzYtM3AyLTg";
+
 // Retrieve and sanitize form data
-$addressLine1 = htmlspecialchars($_POST['addressLine1']);
-$addressLine2 = isset($_POST['addressLine2']) ? htmlspecialchars($_POST['addressLine2']) : 'Default Address Line 2';
-$city = htmlspecialchars($_POST['city']);
-$zipCode = htmlspecialchars($_POST['zipCode']);
-$country = htmlspecialchars($_POST['country']);
+$address = htmlspecialchars($_POST['address']);
 $roofAngle = isset($_POST['roofAngle']) ? htmlspecialchars($_POST['roofAngle']) : '0';
 $panelDirection = isset($_POST['panelDirection']) ? htmlspecialchars($_POST['panelDirection']) : '0';
 
 //maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
 // Prepare the address for the Google Maps API
-$address = urlencode("$addressLine1, $city, $country, $zipCode");
+$address = urlencode("$address");
 
 // Call the Google Maps API
 $geocode = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$superSecretGoogleAPIKey");
@@ -53,7 +50,7 @@ echo "<p><strong>Longitude:</strong> $lng</p>";
 
 echo "<h2>Map</h2>";
 // Display the Google Map
-echo "<p>Sorry at the moment you cannot customise from here.</p>";
+echo "<p>Sorry you cannot change location of data from changing the map.</p>";
 ?>
 <iframe
     width="600"
