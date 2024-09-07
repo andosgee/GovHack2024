@@ -1,8 +1,17 @@
 <?php
 
+
+/**
+ * This class is designed to handle the api call to NIWA SolarView API https://developer.niwa.co.nz/docs/solarview-api/1/overview
+ * At the moment the SolarViewAPI is not available to me, but through their developer docs was able to get some data.
+ * There is two hard coded data available that is accessible through hcCurl() and hcCurl2() functions.
+ * If the API becomes available you can access it using the curl() function when providing a valid NIWA
+ * API key in the private field $superSecretNIWAapiKey
+ */
 class GetSolarInfo
 {
 
+    private $superSecretNIWAapiKey = "";
     private $lat;
     private $lng;
     private $formattedAddress;
@@ -53,7 +62,7 @@ class GetSolarInfo
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
             'Content-Length: ' . strlen($jsonData),
-            'x-apikey: '
+            'x-apikey: ' . $this->superSecretNIWAapiKey
         ]);
 
 // Execute cURL request and get the response
