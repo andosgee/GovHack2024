@@ -21,7 +21,7 @@ $avgkWh = floatval($_POST['avgkWh']);
 $avgCostPerUnit = floatval($_POST['avgCost']);
 
 // Prepare the address for the Google Maps API
-$address = urlencode("$address");
+$address = urlencode($address);
 
 // Call the Google Maps API
 $geocode = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$superSecretGoogleAPIKey");
@@ -34,6 +34,24 @@ $address = explode(',', $formattedAddress)[0];
 // Extract the latitude and longitude from the results
 $lat = $results[0]['geometry']['location']['lat'];
 $lng = $results[0]['geometry']['location']['lng'];
+
+$googleSolarRequest = curl_init("https://solar.googleapis.com/v1/buildingInsights:findClosest?location.latitude=$lat&location.longitude=$lng&requiredQuality=MEDIUM&key=$superSecretGoogleAPIKey");
+curl_setopt($googleSolarRequest, CURLOPT_RETURNTRANSFER, true);
+
+$googleSolarInfo = curl_exec($googleSolarRequest);;
+curl_close($googleSolarRequest);
+$googleSolarInfo = json_decode($googleSolarInfo, true);
+//var_dump($googleSolarInfo["error"]);
+if (!array_key_exists("error", $googleSolarInfo)) {
+    $solarPotential = $googleSolarInfo["solarPotential"];
+    $maxArrayPanelCount = $solarPotential["maxArrayPanelsCount"];
+    $maxArrayArea = $solarPotential["maxArrayAreaMeters2"];
+    $wholeRoofArea = $solarPotential["wholeRoofStats"]["areaMeters2"];
+
+} else {
+    $googleSolarRequest = false;
+}
+
 
 if ($roofAngle) $roofAngle = $lat;
 
@@ -56,14 +74,14 @@ echo "<h2>Map</h2>";
 echo "<p>Sorry you cannot change location of data from changing the map.</p>";
 ?>
 <iframe
-    width="600"
-    height="450"
-    style="border:0"
-    loading="lazy"
-    allowfullscreen
-    referrerpolicy="no-referrer-when-downgrade"
+        width="600"
+        height="450"
+        style="border:0"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
 <?php
-echo "src=\"https://www.google.com/maps/embed/v1/place?key=$superSecretGoogleAPIKey&q=$lat,$lng\"";
+echo "src=\"https://www.google.com/maps/embed/v1/place?key=$superSecretGoogleAPIKey&q=$lat,$lng&zoom=17&maptype=satellite\"";
 echo '>';
 echo '</iframe>';
 
@@ -72,20 +90,36 @@ require 'GetSolarInfo.php';
 $solarInfo = new GetSolarInfo($lat, $lng, $address, $roofAngle, $panelDirection);
 $responseData = $solarInfo->hcCurl();
 
-echo "<h2>Info from Solar API</h2>";
+if ($googleSolarRequest !== false):
+    ?>
+    <h2>Roof Information from Google Solar API</h2>
+    <p>According to Google you roof has:</p>
+    <ul>
+        <li>A total area of <?php echo number_format($wholeRoofArea, 2)?>m<sup>2</sup></li>
+        <li>The ability to have <?php echo $maxArrayPanelCount?> solar panels on it</li>
+        <li>Which covers an area of <?php echo number_format($maxArrayArea, 2)?>m<sup>2</sup></li>
+    </ul>
 
-echo "<img style='max-width: 100%' src=\"{$solarInfo->getImage()}\" alt=\"Solar time map\">";
-echo "<p>Image and data gotten from <a href='https://niwa.co.nz/'>NIWA, the National Institute of Water and Atmospheric Research</a> </p>";
+    <!--Google solar api has the ability to map out the roof with each roof section providing an azimuth and pitch Adding in that information in a nice easy presentable way would be cool but out of my ability-->
 
-echo "<h3>How to understand this</h3>";
-echo '<p>This graph shows how much power a solar panel will generate in kWh/m<sup>2</sup>. There is no way to use custom solar panel areas for this graph, that is taken into account below.</p>';
-echo '<p>This means that each meter square of solar panels will generate this much kW-hr (power unit) cummitivly over the day.</p>';
-echo '<p>The values get read right to left, and shows the time of day under the line in NZST.</p>';
-echo '<p>The different coloured lines are different times of the year with the date on the bottom and shows how solar output differs with the different seasons and length of daylight.</p>';
-echo '<p>This does not take into account shadows cast by neighbours or object (e.g. trees). The graph can be used to calculate that further as shown <a href="https://niwa.co.nz/solarview-example">here</a></p>';
-echo '<p>For more information on how to read this graph, please visit <a href="https://niwa.co.nz/solarview-example">https://niwa.co.nz/solarview-example</a></p>';
+    <p>The amount of panel area you entered was <?php echo $areaOfPanels?>m<sup>2</sup> which is <?php echo number_format($maxArrayArea - $areaOfPanels,2)?>m<sup>2</sup> off the max predicted by Google Solar API</p>
+<?php endif; ?>
+<h2>Info from NIWA Solar API</h2>
 
-echo '<h2>Results</h2>';
+<img style="max-width: 100%" src="<?php echo $solarInfo->getImage();?>" alt="Solar time map">
+<p>Image and data gotten from <a href="https://niwa.co.nz/">NIWA, the National Institute of Water and Atmospheric Research</a></p>
+
+<h3>How to understand this</h3>
+<p>This graph shows how much power a solar panel will generate in kWh/m<sup>2</sup>. There is no way to use custom solar panel areas for this graph, that is taken into account below.</p>
+<p>This means that each meter square of solar panels will generate this much kW-hr (power unit) cumulatively over the day.</p>
+<p>The values get read right to left, and shows the time of day under the line in NZST.</p>
+<p>The different coloured lines are different times of the year with the date on the bottom and shows how solar output differs with the different seasons and length of daylight.</p>
+<p>This does not take into account shadows cast by neighbours or object (e.g. trees). The graph can be used to calculate that further as shown <a href=https://niwa.co.nz/solarview-example>here</a></p>
+<p>For more information on how to read this graph, please visit <a href=https://niwa.co.nz/solarview-example>https://niwa.co.nz/solarview-example</a></p>
+
+<h2>Results</h2>
+
+<?php
 $powerCalc = $solarInfo->getYearlykWperm2();
 //print_r($powerCalc);
 
