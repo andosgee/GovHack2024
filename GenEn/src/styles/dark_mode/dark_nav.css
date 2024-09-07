@@ -1,0 +1,12 @@
+.dark-nav {
+    display: flex;
+    justify-content: space-between;
+    height: 7vh;
+    background-color: black;
+}
+
+.dark-bulb-svg {
+    fill: white;
+    height: 4vh;
+    margin: 1.5vh 3vw 0 0;
+}

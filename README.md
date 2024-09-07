@@ -1,2 +1,5 @@
-# GovHack2024
-GovHack2024 Group Repository
+TO INITIALIZE THE PROJECT IN A DEVELOPMENT ENRIONMENT DO THE FOLLOWING
+
+cd \GenEN\
+npm install
+npm run dev
