@@ -158,7 +158,7 @@ $totalSavings = 0;
         <th>kWh generated</th>
         <th>est. kWh from grid</th>
         <th>cost of kWh from grid</th>
-        <th>Savings</th>
+        <th>Power Savings</th>
     </tr>
     </thead>
     <tbody>
@@ -189,9 +189,10 @@ $totalSavings = 0;
     </tbody>
     <tfoot>
     <tr>
-        <th>Totals</th>
+        <th>Yearly totals</th>
         <th><?php echo number_format($totalAvgkW/12 * 365, 2); ?>kW</th>
-        <th><?php echo number_format($totalkWhGen/12 * 365, 2); ?>kWh</th>
+        <th><?php $yearlykWhGen = $totalkWhGen/12 * 365;
+            echo number_format($yearlykWhGen, 2); ?>kWh</th>
         <th><?php echo number_format($totalkWhFromGrid/12 * 365, 2); ?>kWh</th>
         <th>$<?php echo number_format($totalLeftCost/12 * 365, 2); ?></th>
         <th>$<?php $yearlySavings =  $totalSavings/12 * 365;
@@ -202,21 +203,31 @@ $totalSavings = 0;
 
 <?php
 echo "<p>With $areaOfPanels meters squared of solar panels on $address facing $panelDirection&deg; to North at tilted at ".abs($roofAngle)."&deg; you could possibly save up to $".number_format($yearlySavings, 2)." a year in power costs.</p>";
-
 if ($costOfSystem !== false) {
     $payBackYears = $costOfSystem / $yearlySavings;
     echo "<h2>Return over Investment</h2>";
-    echo "<p>With an upfront cost of ".number_format($costOfSystem)." it will take you ". number_format($payBackYears, 2)." years to pay back your system.</p>";
+    echo "<p>With an upfront cost of $".number_format($costOfSystem)." it will take you ". number_format($payBackYears, 2)." years to pay back your system.</p>";
     echo "<p>This does not account for power cost fluctuations, power being sold back to the power company and presumes generation based on above data, and exact daily usage provided.</p>";
-    echo "<p>ACTUAL RESULTS MAY VARY.</p>";
+
 }
 
-// TODO add in savings for 20 - 25 years 
+echo "<h2>Long term savings</h2>";
+echo "<p>With an annual savings of $". number_format($yearlySavings, 2) ." that means that in 20 years you could save $"
+    . number_format($yearlySavings * 20 - $costOfSystem,2) . " off your power bill" . (($costOfSystem !== false) ? " after the ROI" : "")
+    . ", and have dropped your reliance on the grid by roughly ".  number_format(($avgkWh * 365 - $yearlykWhGen) * 20,2)
+    ."kWh, which means that ". number_format(($yearlykWhGen/($avgkWh * 365)) * 100, 2) ."% of your average power usage you are generating yourself .</p>";
+echo "<p>Note: This does not take into account any maintenance costs, cell degradation or battery degradation</p>"
+
 // TODO somehow add in environmental impact saved, probably from the amount of grid not being used and the data about amount of renewables not being used on the grid
 ?>
 
 <br><hr>
+<p>All data on this page is highly estimated using real weather and sun data from NIWA, roof data from GOOGLE, and user provided values for power and solar array size. ACTUAL RESULTS MAY VARY.</p>
+<p>Usage is intended for a consumer household, while you can use this to estimate the output of a large solar farm you cannot estimate any costs from that.</p>
+<hr>
 <p>Image and data gotten from <a href='https://niwa.co.nz/'>NIWA, the National Institute of Water and Atmospheric Research</a> </p>
-<p>Maps, latitude, longitude and roof data from Google</p>
+<p>Maps, latitude, longitude and roof data from Google<br>&copy; Samuel Douglas</p>
+
+<p></p>
 </body>
 </html>
