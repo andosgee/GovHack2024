@@ -14,6 +14,7 @@ class GetSolarInfo
     private $mhrTable;
     // the Typical Meteorological Year Table
     private $tmyTable;
+    private $weatherStation;
 
     public function __construct($lat, $lng, $formattedAddress, $roofAngle = null, $panelDirection = null)
     {
@@ -111,6 +112,44 @@ class GetSolarInfo
         return $response;
     }
 
+    function hcCurl2() {
+        $response = json_decode('{
+  "input_values": {
+    "latitude": -40.8799316,
+    "longitude": 174.9983659,
+    "panel_bearing": 0,
+    "location_name": "10 Hadfield Place",
+    "images": []
+  },
+  "assets": [
+    {
+      "type": "image/png",
+      "key": "solarview-plot",
+      "url": "https://s3.ap-southeast-2.amazonaws.com/prod.solarview-api.niwa/7bbf39c4fa0a3272500a001f7fe77f8e/image.png",
+      "description": "SolarView Plot"
+    },
+    {
+      "type": "text/csv",
+      "key": "mhr-table",
+      "url": "https://s3.ap-southeast-2.amazonaws.com/prod.solarview-api.niwa/7bbf39c4fa0a3272500a001f7fe77f8e/table_mhr.csv",
+      "description": "Monthly-mean Hourly Radiation Table"
+    },
+    {
+      "type": "text/csv",
+      "key": "tmy-table",
+      "url": "https://s3.ap-southeast-2.amazonaws.com/prod.solarview-api.niwa/7bbf39c4fa0a3272500a001f7fe77f8e/table_tmy.csv",
+      "description": "Typical Meteorological Year Table"
+    }
+  ]
+}', true);
+
+        $this->image = $response['assets'][0]['url'];
+        $this->mhrTable = $response['assets'][1]['url'];
+        $this->tmyTable = $response['assets'][2]['url'];
+
+        return $response;
+    }
+
     public function getImage()
     {
         return $this->image;
@@ -126,7 +165,31 @@ class GetSolarInfo
         return $this->tmyTable;
     }
 
-    public function getYearlykWperm2()
+    public function getWeatherStation()
+    {
+        if (isset($this->weatherStation)) {
+            return $this->weatherStation;
+        }
+        $file = fopen($this->mhrTable, 'r');
+        $lineNumber = 0;
+        $tenthLine = null;
+
+        while (($line = fgetcsv($file)) !== FALSE) {
+            $lineNumber++;
+            if ($lineNumber == 10) {
+                $tenthLine = $line;
+            }
+            if ($lineNumber == 11) {
+                $years = $line[1];
+            }
+        }
+
+        fclose($file);
+        $this->weatherStation = join(" ",$tenthLine) . " over ". $years . " years";
+        return $this->weatherStation;
+    }
+
+    public function getDaykWperm2PerMonth()
     {
 
         $months = [
