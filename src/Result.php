@@ -10,18 +10,15 @@
 <body>
 <?php
 // Result.php
-$superSecretGoogleAPIKey = "";
+$superSecretGoogleAPIKey = "AIzaSyDuC96XOlo4Xzq1k70CasTLwzYtM3AyLTg";
 
 // Retrieve and sanitize form data
 $address = $_POST['address'];
-$roofAngle = $_POST['roofAngle'] != '' ? floatval($_POST['roofAngle']) : 1;
-$panelDirection = $_POST['panelDirection'] != '' ? floatval($_POST['panelDirection']) : 1;
+$roofAngle = $_POST['roofAngle'] != '' ? floatval($_POST['roofAngle']) : true;
+$panelDirection = $_POST['panelDirection'] != '' ? floatval($_POST['panelDirection']) : 0;
 $areaOfPanels = $_POST['areaOfPanels'] != '' ? floatval($_POST['areaOfPanels']) : 1;
 $avgkWh = floatval($_POST['avgkWh']);
 $avgCostPerUnit = floatval($_POST['avgCost']);
-
-
-//maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
 // Prepare the address for the Google Maps API
 $address = urlencode("$address");
@@ -37,6 +34,8 @@ $address = explode(',', $formattedAddress)[0];
 // Extract the latitude and longitude from the results
 $lat = $results[0]['geometry']['location']['lat'];
 $lng = $results[0]['geometry']['location']['lng'];
+
+if ($roofAngle) $roofAngle = $lat;
 
 echo "<h1>Solar Data</h1>";
 echo "<h2>Address</h2>";
@@ -93,9 +92,18 @@ $powerCalc = $solarInfo->getYearlykWperm2();
 
 
 echo "<p>The table below is an estimate on the power output in kW of $areaOfPanels meter squared solar panels for your location.</p>";
-echo "<p>The table shows the estimated per day for each month, and it shows the average and the absolute maximum presuming a perfect world where there are no clouds or anything blocking the solar panels.</p>";
-echo "<p>The kWh is calculated by taking the kW and dividing by 24 (hours in the day), this is presuming that battery storage is also set up to make use of the solar energy at night.</p>"
+echo "<p>The table shows the estimated per day for each month, and it shows the average.</p>";
+echo "<p>The kWh is calculated by taking the kW and dividing by 24 (hours in the day), this is presuming that battery storage is also set up to make use of the solar energy at night.</p>";
+echo "<p>This does not take into account power sold back to the power company when overproducing power</p>";
 //echo "<p>In a perfect world with no clouds it is estimated to generate roughly $yearlyPower[1]kW of power per meter squared of solar panels that you have";
+
+$totalAvgkW = 0;
+$totalkWhGen = 0;
+$totalkWhFromGrid = 0;
+$totalLeftCost = 0;
+$totalSavings = 0;
+
+// totals for calcuations in graph
 ?>
 
 <table>
@@ -107,32 +115,52 @@ echo "<p>The kWh is calculated by taking the kW and dividing by 24 (hours in the
         <th>est. kWh from grid</th>
         <th>cost of kWh from grid</th>
         <th>Savings</th>
-        <th>Cloudless</th>
     </tr>
     </thead>
     <tbody>
     <?php
     foreach ($powerCalc as $month => $data) {
-        $avgkW = floatval($data[0])*$areaOfPanels;
-        $cloudlesskW = $data[1]*$areaOfPanels;
-        $kWhGen = $avgkW/24;
-        $left = $avgkWh - $kWhGen;
+        $avgkW = floatval($data[0]) * $areaOfPanels;
+        $kWhGen = $avgkW / 24;
+        $kWhFromGrid = $avgkWh - $kWhGen;
         $leftCost = ($avgkWh - $kWhGen) * $avgCostPerUnit;
         $savings = $kWhGen * $avgCostPerUnit;
-        $left = max($left, 0);
+        $kWhFromGrid = max($kWhFromGrid, 0);
+
+        $totalAvgkW += $avgkW;
+        $totalkWhGen += $kWhGen;
+        $totalkWhFromGrid += $kWhFromGrid;
+        $totalLeftCost += $leftCost;
+        $totalSavings += $savings;
+
         echo "<tr>";
         echo "<td>$month</td>";
-        echo "<td>{$avgkW}kW</td>";
-        echo "<td>{$kWhGen}kWh</td>";
-        echo "<td>{$left}kwh</td>";
-        echo "<td>$$leftCost</td>";
-        echo "<td>$$savings</td>";
-        echo "<td>{$cloudlesskW}kW</td>";
+        echo "<td>" . number_format($avgkW, 2) . "kW</td>";
+        echo "<td>" . number_format($kWhGen, 2) . "kWh</td>";
+        echo "<td>" . number_format($kWhFromGrid, 2) . "kWh</td>";
+        echo "<td>$" . number_format($leftCost, 2) . "</td>";
+        echo "<td>$" . number_format($savings, 2) . "</td>";
         echo "</tr>";
     }
     ?>
     </tbody>
+    <tfoot>
+    <tr>
+        <th>Totals</th>
+        <th><?php echo number_format($totalAvgkW/12 * 365, 2); ?>kW</th>
+        <th><?php echo number_format($totalkWhGen/12 * 365, 2); ?>kWh</th>
+        <th><?php echo number_format($totalkWhFromGrid/12 * 365, 2); ?>kWh</th>
+        <th>$<?php echo number_format($totalLeftCost/12 * 365, 2); ?></th>
+        <th>$<?php $yearlySavings =  $totalSavings/12 * 365;
+            echo number_format($yearlySavings, 2); ?></th>
+    </tr>
+    </tfoot>
 </table>
+
+<?php
+echo "<p>With $areaOfPanels meters squared of solar panels on your house facing $panelDirection&deg; to North at ".abs($roofAngle)."&deg; you could possibly save up to $".number_format($yearlySavings, 2)." a year in power costs.</p>"
+?>
+
 <p>Image and data gotten from <a href='https://niwa.co.nz/'>NIWA, the National Institute of Water and Atmospheric Research</a> </p>
 </body>
 </html>
