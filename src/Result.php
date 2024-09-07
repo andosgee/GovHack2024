@@ -10,12 +10,16 @@
 <body>
 <?php
 // Result.php
-$superSecretGoogleAPIKey = "AIzaSyDuC96XOlo4Xzq1k70CasTLwzYtM3AyLTg";
+$superSecretGoogleAPIKey = "";
 
 // Retrieve and sanitize form data
-$address = htmlspecialchars($_POST['address']);
-$roofAngle = isset($_POST['roofAngle']) ? htmlspecialchars($_POST['roofAngle']) : '0';
-$panelDirection = isset($_POST['panelDirection']) ? htmlspecialchars($_POST['panelDirection']) : '0';
+$address = $_POST['address'];
+$roofAngle = $_POST['roofAngle'] != '' ? floatval($_POST['roofAngle']) : 1;
+$panelDirection = $_POST['panelDirection'] != '' ? floatval($_POST['panelDirection']) : 1;
+$areaOfPanels = $_POST['areaOfPanels'] != '' ? floatval($_POST['areaOfPanels']) : 1;
+$avgkWh = floatval($_POST['avgkWh']);
+$avgCostPerUnit = floatval($_POST['avgCost']);
+
 
 //maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
@@ -75,7 +79,7 @@ echo "<img style='max-width: 100%' src=\"{$solarInfo->getImage()}\" alt=\"Solar 
 echo "<p>Image and data gotten from <a href='https://niwa.co.nz/'>NIWA, the National Institute of Water and Atmospheric Research</a> </p>";
 
 echo "<h3>How to understand this</h3>";
-echo '<p>This graph shows how much power a solar panel will generate in kW-hr/m<sup>2</sup></p>';
+echo '<p>This graph shows how much power a solar panel will generate in kWh/m<sup>2</sup>. There is no way to use custom solar panel areas for this graph, that is taken into account below.</p>';
 echo '<p>This means that each meter square of solar panels will generate this much kW-hr (power unit) cummitivly over the day.</p>';
 echo '<p>The values get read right to left, and shows the time of day under the line in NZST.</p>';
 echo '<p>The different coloured lines are different times of the year with the date on the bottom and shows how solar output differs with the different seasons and length of daylight.</p>';
@@ -88,8 +92,9 @@ $powerCalc = $solarInfo->getYearlykWperm2();
 
 
 
-echo "<p>The table below is an estimate on the power output in kW of 1 meter squared solar panels for your location.</p>";
-echo "<p>The table shows the estimated per day for each month and it shows the average and the absolute maximum presuming a perfect world where there are no clouds or anything blocking the solar panels.</p>";
+echo "<p>The table below is an estimate on the power output in kW of $areaOfPanels meter squared solar panels for your location.</p>";
+echo "<p>The table shows the estimated per day for each month, and it shows the average and the absolute maximum presuming a perfect world where there are no clouds or anything blocking the solar panels.</p>";
+echo "<p>The kWh is calculated by taking the kW and dividing by 24 (hours in the day), this is presuming that battery storage is also set up to make use of the solar energy at night.</p>"
 //echo "<p>In a perfect world with no clouds it is estimated to generate roughly $yearlyPower[1]kW of power per meter squared of solar panels that you have";
 ?>
 
@@ -98,16 +103,31 @@ echo "<p>The table shows the estimated per day for each month and it shows the a
     <tr>
         <th>Month</th>
         <th>Average</th>
+        <th>kWh generated</th>
+        <th>est. kWh from grid</th>
+        <th>cost of kWh from grid</th>
+        <th>Savings</th>
         <th>Cloudless</th>
     </tr>
     </thead>
     <tbody>
     <?php
     foreach ($powerCalc as $month => $data) {
+        $avgkW = floatval($data[0])*$areaOfPanels;
+        $cloudlesskW = $data[1]*$areaOfPanels;
+        $kWhGen = $avgkW/24;
+        $left = $avgkWh - $kWhGen;
+        $leftCost = ($avgkWh - $kWhGen) * $avgCostPerUnit;
+        $savings = $kWhGen * $avgCostPerUnit;
+        $left = max($left, 0);
         echo "<tr>";
-        echo "<td>{$month}</td>";
-        echo "<td>{$data[0]}</td>";
-        echo "<td>{$data[1]}</td>";
+        echo "<td>$month</td>";
+        echo "<td>{$avgkW}kW</td>";
+        echo "<td>{$kWhGen}kWh</td>";
+        echo "<td>{$left}kwh</td>";
+        echo "<td>$$leftCost</td>";
+        echo "<td>$$savings</td>";
+        echo "<td>{$cloudlesskW}kW</td>";
         echo "</tr>";
     }
     ?>

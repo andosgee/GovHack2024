@@ -52,7 +52,7 @@ class GetSolarInfo
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
             'Content-Length: ' . strlen($jsonData),
-            'x-apikey: gX924ScwiMUKyATT19v3VEr54X4BzgOw'
+            'x-apikey: '
         ]);
 
 // Execute cURL request and get the response
@@ -72,6 +72,7 @@ class GetSolarInfo
         return json_decode($response, true);
     }
 
+    // Don't have valid API key so using a hardcoded response that can be gotten from their website.
     function hcCurl() {
         $response = json_decode('{
   "input_values": {
@@ -159,16 +160,7 @@ class GetSolarInfo
             }
             $monthData[$month] = $data;
         }
-//        var_dump($months);
-
-
-
         return $monthData;
     }
 
 }
-//
-//$thingy = new GetSolarInfo(0,0,"f");
-//$thingy->hcCurl();
-////$thingy->getYearlykWperm2();
-//var_dump($thingy->getYearlykWperm2());

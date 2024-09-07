@@ -14,19 +14,37 @@
 <header>
     <h1>Solar Calculator</h1>
 </header>
-<form id="SearchForm" method="POST" action="Result.php" onsubmit="return validateForm()">
-    <div>
-        <label>Address:
-            <input id="autocomplete_search" style="width: 100%;" name="address" type="text" class="form-control" placeholder="Search" />
+<form id="SearchForm" method="POST" style="width: 100%" action="Result.php" onsubmit="return validateForm()">
+    <div style="width: 50%;">
+        <label >Address:
+            <input id="autocomplete_search" style="width: 75%;" name="address" type="text" class="form-control" placeholder="Search" required/>
         </label>
+    </div>
+    <div>
+        This is used to calculate savings, national average daily per household is roughly 20 kWh<br><br>
+        <label>Avg kh per day for your household:
+            <input type="number" name="avgkWh" placeholder="20" step="0.01" required> kWh
+        </label>
+    </div>
+    <div>
+        The cost per unit that you are paying, the national average is $0.30 per unit<br><br>
+        <label>Avg cost per unit:
+            $<input type="number" name="avgCost" placeholder="0.30" step="0.01" required>
+        </label>
+    </div>
     <div>
         <label>Roof Angle aka. Panel tilt (Degrees):
-            <input type="number" name="roofAngle" placeholder="0 is horizontal, default is latitude">
+            <input type="number" name="roofAngle" step="0.01" placeholder="0 is horizontal, default is latitude"> &deg;
         </label>
     </div>
     <div>
         <label>Direction Panels are facing (Degrees):
-            <input type="number" name="roofAngle" placeholder="Default North which is 0">
+            <input type="number" name="panelDirection" step="0.01" placeholder="Default North which is 0"> &deg;
+        </label>
+    </div>
+    <div>
+        <label>Area of Panels in m<sup>2</sup>:
+            <input type="number" name="areaOfPanels" step="0.01" placeholder="Default is 1"> m<sup>2
         </label>
     </div>
     <button class="button-link" type="submit" value="submit">Submit</button>
