@@ -1,6 +1,4 @@
 name,value
-Biomass,35
-Battery,60
 Coal,750
 Diesel,155
 Gas, 1478.6
@@ -8,4 +6,4 @@ Geothermal, 1158.4
 Hydro, 5345.4
 Solar, 65
 Wind, 831.5
-Wood, 28
+Other, 123

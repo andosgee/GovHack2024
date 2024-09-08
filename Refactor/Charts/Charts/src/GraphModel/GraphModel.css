@@ -1,3 +1,20 @@
 .PieGraph{
     background-color: aliceblue;
 }
+
+.controls {
+    margin-top: 10px;
+}
+
+.controls label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.x-axis text {
+    fill: black;
+}
+
+.y-axis text {
+    fill: black;
+}

@@ -1,4 +1,3 @@
-// src/components/Chart.js
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import "./GraphModel.css";
@@ -26,10 +25,10 @@ const Chart = () => {
       .attr('text-anchor', 'middle')
       .attr('font-size', '24px')
       .attr('font-weight', 'bold')
-      .text('Power Types in NZ, MW/H');
+      .text('Energy Types in MW');
 
     // Load the CSV data
-    d3.csv('/data/sample.csv').then(data => {
+    d3.csv('/data/EnergyTypeMW.csv').then(data => {
       // Parse and transform the data as needed
       data.forEach(d => {
         d.value = +d.value; // Convert the value to a number
@@ -53,11 +52,17 @@ const Chart = () => {
         .outerRadius(radius)
         .innerRadius(0); // For a full pie chart, use 0 for the inner radius
 
-      // Define color scale
-      const color = d3.scaleOrdinal(d3.schemeCategory10);
+      // Define color scales for default and hover states
+      const color = d3.scaleOrdinal()
+        .domain(data.map(d => d.name))
+        .range(['#F44336', '#4CAF50']); // Default colors for slices
+
+      const hoverColor = d3.scaleOrdinal()
+        .domain(data.map(d => d.name))
+        .range(['#E57373', '#66BB6A']); // Hover colors for slices
 
       // Draw pie slices
-      svg.selectAll('path')
+      const slices = svg.selectAll('path')
         .data(pie(data))
         .enter()
         .append('path')
@@ -66,7 +71,8 @@ const Chart = () => {
         .attr('stroke', 'white')
         .attr('stroke-width', '1px')
         .on('mouseover', function(event, d) {
-          d3.select(this).attr('fill', 'orange');
+          d3.select(this)
+            .attr('fill', hoverColor(d.data.name));
 
           // Show the percentage
           svg.append('text')
@@ -79,7 +85,8 @@ const Chart = () => {
             .text(`${d.data.percent}%`);
         })
         .on('mouseout', function(event, d) {
-          d3.select(this).attr('fill', color(d.data.name));
+          d3.select(this)
+            .attr('fill', color(d.data.name));
 
           // Remove the percentage label
           svg.selectAll('.percent-label').remove();
