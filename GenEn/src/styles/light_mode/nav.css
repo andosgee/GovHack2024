@@ -3,6 +3,7 @@ nav {
     justify-content: space-between;
     height: 9vh;
     border-bottom: .5px solid rgb(204, 204, 204);
+    font-size: 1.5em;
 }
 
 .nav-logo {
@@ -13,5 +14,18 @@ nav {
 
 .light-bulb-svg {
     height: 4vh;
-    margin: 1.5vh 3vw 0 0;
+}
+
+.buttons-container {
+    margin-right: 2.5vw;
+    width: 25vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons:hover {
+    font-size: 1.2em;
+    color: rgb(102, 102, 102);
+    cursor: pointer;
 }

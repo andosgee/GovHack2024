@@ -8,7 +8,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/consumer" element={<Consumer />}></Route>
+      <Route path="/solar-calculator" element={<Consumer />}></Route>
       <Route path="*" element={<Home />}></Route>
     </Routes>
   )

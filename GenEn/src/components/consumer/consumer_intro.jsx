@@ -1,10 +1,10 @@
 import introImg from '../../assets/images/FreePik-Solar-Panel.jpg'
 
-export default function ConsumerIntro(){
+export default function ConsumerIntro() {
     return (
-        <>
-        <img src={introImg} className="consumer-intro-img"/>
-        <p className="consumer-intro-header">Switch to Renewable Energy: Help power Aotearoa</p>
-        </>
+        <div className="consumer-intro-container">
+            <img className="consumer-intro-img" src={introImg}/>
+                <h1 className="consumer-intro-header">Help power Aotearoa: Check if Solar works for you!</h1>
+        </div>
     )
 }

@@ -7,6 +7,7 @@ export default function Consumer(){
         <>
           <Nav />
           <ConsumerIntro />
+          <iframe src="https://bcis303.gladiatorsas.me/gh/" style={{width:"80%", height: "75vh", margin: "5vh 0 0 10%"}} title="description"></iframe> 
         </>
     )
 }

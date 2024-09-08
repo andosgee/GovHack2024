@@ -12,24 +12,37 @@
     }
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+
+    100% {
+        opacity: 1
+    }
+}
+
 @keyframes moveUp {
     0% {
         opacity: 0.55
     }
 
     100% {
-        transform: translateY(-18.5vh);
+        transform: translateY(-12.5vh);
         opacity: 1
     }
 }
 
-@keyframes moveUpGraph {
+@keyframes moveInLeft {
+    0% {
+        opacity: 0;
+    }
+
     5% {
         opacity: 0.75
     }
-
     100% {
-        transform: translateY(-12.5vh);
+        transform: translateX(-3.5vw);
         opacity: 1
     }
 }
