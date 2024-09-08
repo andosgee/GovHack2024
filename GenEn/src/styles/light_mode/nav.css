@@ -1,0 +1,31 @@
+nav {
+    display: flex;
+    justify-content: space-between;
+    height: 9vh;
+    border-bottom: .5px solid rgb(204, 204, 204);
+    font-size: 1.5em;
+}
+
+.nav-logo {
+    width: 9vw;
+    height: 6vh;
+    margin: 0.5vh 0 0 1.5vw;
+}
+
+.light-bulb-svg {
+    height: 4vh;
+}
+
+.buttons-container {
+    margin-right: 2.5vw;
+    width: 25vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons:hover {
+    font-size: 1.2em;
+    color: rgb(102, 102, 102);
+    cursor: pointer;
+}
