@@ -227,7 +227,7 @@
             $payBackYears = $costOfSystem / $yearlySavings;
             echo "<h2>Return over Investment</h2>";
             echo "<p>With an upfront cost of $" . number_format($costOfSystem) . " it will take you " . number_format($payBackYears, 2) . " years to pay back your system.</p>";
-            echo "<p>This does not account for power cost fluctuations, power being sold back to the power company and presumes generation based on above data, and exact daily usage provided.</p>";
+            echo "<p>This does not account for power cost fluctuations, power being sold back to the power company, or inflation and presumes generation based on above data, and the exact daily usage provided.</p>";
 
         }
 
@@ -236,7 +236,7 @@
             . number_format($yearlySavings * 20 - $costOfSystem, 2) . " off your power bill" . (($costOfSystem !== false) ? " after the ROI" : "")
             . ", and have dropped your reliance on the grid by roughly " . number_format(($avgkWh * 365 - $yearlykWhGen) * 20, 2)
             . "kWh, which means that " . number_format(($yearlykWhGen / ($avgkWh * 365)) * 100, 2) . "% of your average power usage you are generating yourself .</p>";
-        echo "<p>Note: This does not take into account any maintenance costs, cell degradation or battery degradation</p>"
+        echo "<p>Note: This does not take into account any maintenance costs, inflation, cell degradation or battery degradation</p>"
 
         // TODO somehow add in environmental impact saved, probably from the amount of grid not being used and the data about amount of renewables not being used on the grid
         ?>
