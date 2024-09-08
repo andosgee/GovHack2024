@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", function() {
         40000000     // Total for Wood
     ];
 
-    const ctx = document.getElementById('energyPieChart').getContext('2d');
+    const ctx = document.getElementById('energyLineChart').getContext('2d');
     const energyPieChart = new Chart(ctx, {
-        type: 'pie',
+        type: 'line',
         data: {
             labels: energySourceLabels,
             datasets: [{
