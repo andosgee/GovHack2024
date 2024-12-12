@@ -1,5 +1,6 @@
-TO INITIALIZE THE PROJECT IN A DEVELOPMENT ENRIONMENT DO THE FOLLOWING
+# GovHack 2024 - Hackivators
 
-cd \GenEN\
-npm install
-npm run dev
+GovHack 2024 Submission
+
+## URL
+https://genen.andrewdevelops.com
